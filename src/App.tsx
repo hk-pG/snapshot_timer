@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { MainPage } from "./MainPage";
 import { Navigator } from "react-onsenui";
 
-import MainPage from "./MainPage";
-
 export default class App extends React.Component {
-  renderPage(route, navigator) {
+  renderPage(route: any, navigator: Navigator) {
     const props = route.props || {};
     props.navigator = navigator;
 

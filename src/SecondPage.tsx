@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Toolbar, Page, Button, BackButton } from "react-onsenui";
 
-export default class SecondPage extends React.Component {
+class SecondPage extends React.Component {
   pushPage() {
     this.props.navigator.pushPage({ component: SecondPage });
   }
@@ -33,3 +33,5 @@ export default class SecondPage extends React.Component {
     );
   }
 }
+
+export { SecondPage };
