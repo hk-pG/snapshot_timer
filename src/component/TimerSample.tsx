@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { PlayArrow, RestartAlt, Save, Stop } from '@mui/icons-material';
+import { Pause, PlayArrow, RestartAlt, Save, Stop } from '@mui/icons-material';
 import { Button, Card, Fab, Grid, Typography } from '@mui/material';
 import Timer, { TimerStateValues } from 'react-compound-timer';
 import React, { useState } from 'react';
@@ -29,6 +29,13 @@ const buttonSpace = css`
   margin: 5px;
 `;
 
+type TimerValue = {
+  hours: number;
+  minutes: number;
+  seconds: number;
+  milliseconds: number;
+};
+
 const MyStopwatch = (): JSX.Element => {
   const [isRunning, setIsRunning] = useState(false);
 
@@ -46,98 +53,102 @@ const MyStopwatch = (): JSX.Element => {
           },
         ]}
       >
-        {({
+        {
+          // Timer component
+          ({
+            //
+            resume,
+            pause,
+            reset,
+            timerState,
+          }: {
+            start: () => void;
+            resume: () => void;
+            pause: () => void;
+            stop: () => void;
+            reset: () => void;
+            timerState: TimerStateValues;
+          }) => {
+            return (
+              <>
+                <div css={timerContainer}>
+                  <Card css={time} variant="elevation">
+                    <Timer.Hours
+                      formatValue={(value) => {
+                        return value.toString().padStart(2, '0');
+                      }}
+                    />
+                    :
+                    <Timer.Minutes
+                      formatValue={(value) => {
+                        return value.toString().padStart(2, '0');
+                      }}
+                    />
+                    :
+                    <Timer.Seconds
+                      formatValue={(value) => {
+                        return value.toString().padStart(2, '0');
+                      }}
+                    />
+                    :
+                    <Timer.Milliseconds
+                      formatValue={(value) => {
+                        return value.toString().padStart(3, '0');
+                      }}
+                    />
+                  </Card>
+                </div>
+                <div css={buttonContainer}>
+                  {!isRunning ? (
+                    <Fab
+                      css={buttonSpace}
+                      variant="circular"
+                      color="primary"
+                      onClick={() => {
+                        resume();
+                        setIsRunning((running) => !running);
+                      }}
+                    >
+                      <PlayArrow />
+                    </Fab>
+                  ) : (
+                    <Fab
+                      css={buttonSpace}
+                      variant="circular"
+                      color="secondary"
+                      onClick={() => {
+                        pause();
+                        setIsRunning((notRunning) => !notRunning);
+                      }}
+                    >
+                      <Pause />
+                    </Fab>
+                  )}
+                  <Fab
+                    //
+                    css={buttonSpace}
+                    variant="circular"
+                    onClick={reset}
+                  >
+                    <RestartAlt />
+                  </Fab>
+                </div>
+              </>
+            );
+          }
           //
-          start,
-          resume,
-          pause,
-          stop,
-          reset,
-          timerState,
-        }: {
-          start: () => void;
-          resume: () => void;
-          pause: () => void;
-          stop: () => void;
-          reset: () => void;
-          timerState: TimerStateValues;
-        }) => {
-          return (
-            <>
-              <div css={timerContainer}>
-                <Card css={time} variant="outlined">
-                  <Timer.Hours
-                    formatValue={(value) => {
-                      return value.toString().padStart(2, '0');
-                    }}
-                  />
-                  :
-                  <Timer.Minutes
-                    formatValue={(value) => {
-                      return value.toString().padStart(2, '0');
-                    }}
-                  />
-                  :
-                  <Timer.Seconds
-                    formatValue={(value) => {
-                      return value.toString().padStart(2, '0');
-                    }}
-                  />
-                  :
-                  <Timer.Milliseconds
-                    formatValue={(value) => {
-                      return value.toString().padStart(3, '0');
-                    }}
-                  />
-                </Card>
-              </div>
-              <div css={buttonContainer}>
-                {!isRunning ? (
-                  <Fab
-                    css={buttonSpace}
-                    variant="circular"
-                    color="primary"
-                    onClick={() => {
-                      resume();
-                      setIsRunning((running) => !running);
-                    }}
-                  >
-                    <PlayArrow />
-                  </Fab>
-                ) : (
-                  <Fab
-                    css={buttonSpace}
-                    variant="circular"
-                    color="secondary"
-                    onClick={() => {
-                      pause();
-                      setIsRunning((notRunning) => !notRunning);
-                    }}
-                  >
-                    <Stop />
-                  </Fab>
-                )}
-                <Fab
-                  //
-                  css={buttonSpace}
-                  variant="circular"
-                  onClick={reset}
-                >
-                  <RestartAlt />
-                </Fab>
-              </div>
-            </>
-          );
-        }}
+        }
       </Timer>
     </>
   );
 };
 
-export default function TimerSampleApp() {
+function TimerSampleApp() {
   return (
     <div>
       <MyStopwatch />
     </div>
   );
 }
+
+export { TimerSampleApp, TimerValue };
