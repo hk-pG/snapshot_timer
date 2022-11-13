@@ -1,14 +1,15 @@
 import { CompoundTimer } from './component/CompoundTimer';
 import { Header } from './component/Header';
 import { SimpleBottomNavigation } from './component/Pages';
-import TimerSampleApp from './component/TimerSample';
+import { Stopwatch } from './Test';
 
 const App = () => {
   return (
     <>
-      <Header />
+      <header>
+        <Header />
+      </header>
       <SimpleBottomNavigation />
-      <TimerSampleApp />
     </>
   );
 };

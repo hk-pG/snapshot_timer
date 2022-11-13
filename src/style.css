@@ -3,3 +3,8 @@
 * {
   font-family: 'M PLUS Rounded 1c', sans-serif;
 }
+
+body {
+  margin: 0;
+  user-select: none;
+}
