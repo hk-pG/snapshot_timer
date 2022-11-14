@@ -5,10 +5,30 @@ import React, { useEffect, useState } from 'react';
 
 import { css, keyframes } from '@emotion/react';
 import './TimerSample.css';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { TimeRecords, timeRecordsState } from './TimerSample';
 
 const timerContainer = css`
   text-align: center;
 `;
+
+type dateProps = {
+  year: number;
+  month: number;
+  day: number;
+  date: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  milliseconds: number;
+};
+
+type Test = {
+  millisecond?: number;
+  editAt: dateProps;
+};
+
+export const test: Test[] = [];
 
 const timeField = css`
   margin: 60px;
@@ -34,6 +54,8 @@ export const Stopwatch = (): JSX.Element => {
   const [timeValue, setTimeValue] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
+  const [_timeRecords, _setTimeRecords] = useState<TimeRecords>();
+
   useEffect(() => {
     let interval: string | number | NodeJS.Timeout | undefined;
     if (isRunning) {
@@ -46,7 +68,42 @@ export const Stopwatch = (): JSX.Element => {
     return () => clearInterval(interval);
   }, [isRunning]);
 
-  const reset = () => setTimeValue((_) => 0);
+  function editRecord() {
+    const now = new Date();
+
+    const date = {
+      year: now.getFullYear(),
+      month: now.getMonth(),
+      day: now.getDate(),
+      date: now.getDay(),
+      hours: now.getHours(),
+      minutes: now.getMinutes(),
+      seconds: now.getSeconds(),
+      milliseconds: now.getMilliseconds(),
+    };
+
+    if (!isRunning) {
+      // タイマー開始ボタンも兼ねている
+      setIsRunning((_) => true);
+      _setTimeRecords((prev) => prev?.startRecord());
+      test.push({ editAt: date });
+    } else {
+      // 既に開始していたら記録をする
+      _setTimeRecords((prev) => prev?.addRecord(timeValue));
+      test.push({
+        millisecond: timeValue,
+        editAt: date,
+      });
+    }
+  }
+
+  function reset() {
+    // 記録を終了する
+    if (isRunning) {
+      _setTimeRecords((prev) => prev?.finishRecord());
+    }
+    setTimeValue((_) => 0);
+  }
 
   const [open, setOpen] = React.useState(false);
 
@@ -112,10 +169,7 @@ export const Stopwatch = (): JSX.Element => {
           color="primary"
           onClick={() => {
             handleClick();
-            if (!isRunning) {
-              // タイマー開始ボタンも兼ねている
-              setIsRunning((_) => true);
-            }
+            editRecord();
           }}
           css={css({
             lineHeight: '2em',
