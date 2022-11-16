@@ -3,10 +3,11 @@ import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import RestoreIcon from '@mui/icons-material/Restore';
-import { Timer } from '@mui/icons-material';
+import { LocationOn, Timer } from '@mui/icons-material';
 import { Record } from './Record';
 import { TimerSampleApp } from './TimerSample';
 import './css/Pages.module.css';
+import { GeoPoint } from './GeoPoint';
 
 const SimpleBottomNavigation = () => {
   const [pageIndex, setValue] = React.useState(0);
@@ -15,6 +16,7 @@ const SimpleBottomNavigation = () => {
     // Timer and record
     <TimerSampleApp />,
     <Record />,
+    <GeoPoint />,
   ];
 
   return (
@@ -39,6 +41,7 @@ const SimpleBottomNavigation = () => {
         >
           <BottomNavigationAction label="測定" icon={<Timer />} />
           <BottomNavigationAction label="履歴" icon={<RestoreIcon />} />
+          <BottomNavigationAction label="位置情報" icon={<LocationOn />} />
         </BottomNavigation>
       </Box>
     </main>
