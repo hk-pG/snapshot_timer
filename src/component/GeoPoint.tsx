@@ -13,10 +13,7 @@ const ErrorText = () => (
 
 export const GeoPoint = () => {
   const [isAvailable, setAvailable] = useState(false);
-  const [position, setPosition] = useState<Location>({
-    latitude: null,
-    longitude: null,
-  });
+  const [position, setPosition] = useState<Location>();
 
   const [open, setOpen] = useState(false);
 
@@ -50,21 +47,24 @@ export const GeoPoint = () => {
   }, [isAvailable]);
 
   const getCurrentPosition = () => {
-    navigator.geolocation.getCurrentPosition((_position) => {
-      const { latitude, longitude } = _position.coords;
-      const prev = position;
-      if (!position.latitude) {
-        setPosition({ latitude, longitude });
-      }
-      if (prev.latitude != latitude && prev.longitude != longitude) {
-        console.log(`diff lat: ${prev.latitude} <> ${latitude}`);
-        console.log(`diff lng: ${prev.longitude} <> ${longitude}`);
-        setPosition({ latitude, longitude });
-        handleClick();
-      }
-    });
+    navigator.geolocation.getCurrentPosition((_newPos) => {
+      // get current position.
+      const prevLat = position?.latitude;
+      const prevLng = position?.longitude;
 
-    setTimeout(getCurrentPosition, 5000);
+      // get new position.
+      const { latitude: newLat, longitude: newLng } = _newPos.coords;
+
+      // log change of points
+      console.log(`prev: ${prevLat} : ${prevLng}`);
+      console.log(`new: ${newLat} : ${newLng}`);
+
+      // set new current position.
+      setPosition((prev) => ({ latitude: newLat, longitude: newLng }));
+
+      // display snackbar
+      handleClick();
+    });
   };
 
   // useEffect実行前であれば、"Loading..."という呼び出しを表示させます
@@ -82,9 +82,15 @@ export const GeoPoint = () => {
             textAlign: 'center',
           }}
         >
-          <p>latitude: {position.latitude}</p>
-          <p>longitude: {position.longitude}</p>
-          <Button onClick={getCurrentPosition}>Get Current Position</Button>
+          <p>latitude: {position?.latitude}</p>
+          <p>longitude: {position?.longitude}</p>
+          <Button
+            onClick={() => {
+              setInterval(getCurrentPosition, 5000);
+            }}
+          >
+            Get Current Position
+          </Button>
 
           <Snackbar
             //
