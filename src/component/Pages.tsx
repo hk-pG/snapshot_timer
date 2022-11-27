@@ -3,11 +3,18 @@ import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import RestoreIcon from '@mui/icons-material/Restore';
-import { LocationOn, Timer } from '@mui/icons-material';
+import {
+  ArrowBackRounded,
+  Camera,
+  LocationOn,
+  Timer,
+} from '@mui/icons-material';
 import { Record } from './Record';
 import { TimerSampleApp } from './TimerSample';
 import './css/Pages.module.css';
 import { GeoPoint } from './GeoPoint';
+import { CameraPage } from './CameraPage';
+import { AccelerationPage } from './AccelerationPage';
 
 const SimpleBottomNavigation = () => {
   const [pageIndex, setValue] = React.useState(0);
@@ -17,6 +24,8 @@ const SimpleBottomNavigation = () => {
     <TimerSampleApp />,
     <Record />,
     <GeoPoint />,
+    <CameraPage />,
+    <AccelerationPage />,
   ];
 
   return (
@@ -42,6 +51,8 @@ const SimpleBottomNavigation = () => {
           <BottomNavigationAction label="測定" icon={<Timer />} />
           <BottomNavigationAction label="履歴" icon={<RestoreIcon />} />
           <BottomNavigationAction label="位置情報" icon={<LocationOn />} />
+          <BottomNavigationAction label="カメラ" icon={<Camera />} />
+          <BottomNavigationAction label="加速度" icon={<ArrowBackRounded />} />
         </BottomNavigation>
       </Box>
     </main>
